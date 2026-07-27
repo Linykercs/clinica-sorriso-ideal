@@ -1,26 +1,89 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ==========================================================================
+   TEMA
+   ==========================================================================
+   Os valores das cores NÃO ficam aqui. Eles vêm de `config/site.ts` e são
+   aplicados na tag <html> por `app/layout.tsx` como variáveis CSS.
+   Este bloco apenas conecta essas variáveis ao Tailwind, gerando as classes
+   bg-primaria, text-titulo, border-borda e assim por diante.
 
+   Para trocar a identidade visual, edite `config/site.ts`, não este arquivo.
+   ========================================================================== */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-primaria: var(--cor-primaria);
+  --color-primaria-escura: var(--cor-primaria-escura);
+  --color-primaria-clara: var(--cor-primaria-clara);
+  --color-destaque: var(--cor-destaque);
+  --color-titulo: var(--cor-titulo);
+  --color-texto: var(--cor-texto);
+  --color-fundo: var(--cor-fundo);
+  --color-fundo-suave: var(--cor-fundo-suave);
+  --color-borda: var(--cor-borda);
+
+  /* As fontes são carregadas com next/font em `app/layout.tsx`. */
+  --font-titulo: var(--fonte-titulo);
+  --font-corpo: var(--fonte-corpo);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  html {
+    /* Rolagem suave entre as seções do menu. */
+    scroll-behavior: smooth;
+  }
+
+  /* Compensa a altura do header fixo ao pular para uma âncora. */
+  [id] {
+    scroll-margin-top: 5.5rem;
+  }
+
+  body {
+    background-color: var(--cor-fundo);
+    color: var(--cor-texto);
+    font-family: var(--font-corpo), system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-titulo), system-ui, sans-serif;
+    color: var(--cor-titulo);
+    text-wrap: balance;
+  }
+
+  /* Respeita quem pediu menos animação no sistema. */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ==========================================================================
+   ANIMAÇÃO DE ENTRADA
+   Usada nos elementos da primeira dobra, com atraso escalonado.
+   ========================================================================== */
+@keyframes subir {
+  from {
+    opacity: 0;
+    transform: translateY(1.25rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animar-entrada {
+  animation: subir 0.7s cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
